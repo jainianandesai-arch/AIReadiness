@@ -94,7 +94,7 @@ ROADMAP_BY_PATTERN = {
     "Trust Calibration Gap": {
         "30": [
             "Define, for the top 5 AI use cases, when AI output can be used directly vs. must be reviewed vs. must be escalated.",
-            "Identify the two or three decisions where over-trust in AI creates the most organisational risk.",
+            "Identify the two or three decisions where over-trust in AI creates the most organizational risk.",
             "Brief leaders on their accountability for AI output that passes through their teams without review.",
         ],
         "60": [
@@ -172,7 +172,7 @@ ROADMAP_BY_PATTERN = {
         ],
         "90": [
             "Build AI adoption sequencing into annual planning — treat it as a capacity decision, not just a technology decision.",
-            "Establish a change capacity metric: measure and publish the organisational change load quarterly.",
+            "Establish a change capacity metric: measure and publish the organizational change load quarterly.",
             "Reconnect with teams that delayed adoption — resume with updated context and lighter-touch onboarding.",
         ],
     },
@@ -188,7 +188,7 @@ ROADMAP_BY_PATTERN = {
             "Involve affected employees in workflow redesign — co-design reduces resistance and improves adoption.",
         ],
         "90": [
-            "Publish a workforce impact framework: how the organisation plans, communicates, and supports people through AI-driven change.",
+            "Publish a workforce impact framework: how the organization plans, communicates, and supports people through AI-driven change.",
             "Connect AI implementation planning with workforce planning cycles — treat them as the same decision.",
             "Track employee experience metrics in AI-affected teams as a lagging indicator of impact planning quality.",
         ],
@@ -344,7 +344,7 @@ def detect_failure_patterns(scores):
             "Leadership messaging appears stronger than the discipline used to prove value.",
             ["Leadership signals are relatively strong",
              "Business value definition and measurement are both weaker than leadership readiness"],
-            "The organisation may look active on AI while struggling to show measurable business outcomes.")
+            "The organization may look active on AI while struggling to show measurable business outcomes.")
 
     # Pilot Purgatory: execution pathway weak (replaces old Q4+Q5 split)
     if execution < 55:
@@ -372,7 +372,7 @@ def detect_failure_patterns(scores):
     # Trust Calibration Gap
     if trust < 60:
         add("Trust Calibration Gap", 90 - trust,
-            "The organisation lacks a shared framework for when to trust, challenge, or reject AI output.",
+            "The organization lacks a shared framework for when to trust, challenge, or reject AI output.",
             ["Human judgment protocol and trust calibration are both below strong readiness"],
             "Adoption may become inconsistent, risky, or dependent on individual judgment rather than defined criteria.")
 
@@ -391,21 +391,21 @@ def detect_failure_patterns(scores):
     # Shadow AI Risk
     if shadow < 60:
         add("Shadow AI Risk", 90 - shadow,
-            "The organisation has limited visibility into unapproved AI use.",
+            "The organization has limited visibility into unapproved AI use.",
             ["Shadow AI visibility is below strong readiness"],
             "Employees may already be using AI outside approved tools, data controls, or validation guidance.")
 
     # Change Saturation Risk
     if change < 50:
         add("Change Saturation Risk", 90 - change,
-            "AI adoption is competing with a heavy organisational change load.",
+            "AI adoption is competing with a heavy organizational change load.",
             ["Change capacity is below the threshold needed for reliable adoption"],
-            "Adoption risk may be driven less by resistance to AI and more by limited organisational capacity.")
+            "Adoption risk may be driven less by resistance to AI and more by limited organizational capacity.")
 
     # Workforce Impact Blind Spot
     if workforce_impact < 55:
         add("Workforce Impact Blind Spot", 90 - workforce_impact,
-            "The organisation may be changing processes before understanding the people impact.",
+            "The organization may be changing processes before understanding the people impact.",
             ["Workforce impact planning is below strong readiness"],
             "Resistance may emerge after implementation because role, skill, and workload impacts were not designed upfront.")
 
@@ -415,7 +415,7 @@ def detect_failure_patterns(scores):
         add("Value Measurement Blind Spot", 90 - value,
             "AI activity may be moving forward without rigorous baseline and outcome measurement.",
             ["Value discipline and measurement are weaker than execution activity"],
-            "The organisation may be confusing usage, interest, or anecdote with business impact.")
+            "The organization may be confusing usage, interest, or anecdote with business impact.")
 
     # Fallback
     if not patterns:
@@ -423,7 +423,7 @@ def detect_failure_patterns(scores):
         add("Focused Scale Opportunity", 35,
             f"Readiness is broadly solid — the most actionable improvement area is {weakest[0].lower()}.",
             [f"Lowest readiness dimension: {weakest[0]} ({weakest[1]}/100)"],
-            "The organisation has a working foundation; targeted improvement in this dimension would strengthen AI value realisation.")
+            "The organization has a working foundation; targeted improvement in this dimension would strengthen AI value realisation.")
 
     return sorted(patterns, key=lambda p: p["severity"], reverse=True)[:5]
 

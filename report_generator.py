@@ -27,13 +27,13 @@ vendor names, implementation history, or headcount decisions.
 Do not recommend surveillance, punitive monitoring, or layoffs.
 
 Write in a direct, evidence-based strategy consulting style.
-Your job is to explain the most likely failure point and what the organisation should do first.
+Your job is to explain the most likely value barrier and what the organization should do first.
 Keep the report concise enough for a 2-page PDF.
 """.strip()
 
 
 def deterministic_markdown(pack):
-    primary  = pack["primary_failure_point"]
+    primary  = pack["primary_value_barrier"]
     patterns = pack["patterns"][:3]
     strengths = pack["strongest_dimensions"][:2]
     gaps      = pack["weakest_dimensions"][:3]
@@ -41,7 +41,7 @@ def deterministic_markdown(pack):
 
     lines = []
     lines.append("# AI Transformation Readiness Intelligence")
-    lines.append(f"**Organisation:** {pack['organization_name']}  ")
+    lines.append(f"**Organization:** {pack['organization_name']}  ")
     lines.append(f"**Generated:** {datetime.now().strftime('%d %b %Y  %H:%M')}  ")
     lines.append(f"**Overall readiness:** {pack['overall_score']}/100 — {pack['overall_band']['label']}  ")
     lines.append("")
@@ -68,7 +68,7 @@ def deterministic_markdown(pack):
     lines.append("")
     lines.append("## Executive headline")
     lines.append(
-        f"The most likely AI transformation failure point is **{primary['name']}**. "
+        f"The most likely AI transformation value barrier is **{primary['name']}**. "
         f"{primary['summary']} {primary['implications']}"
     )
     lines.append("")
@@ -88,7 +88,7 @@ def deterministic_markdown(pack):
     for name, score in gaps:
         lines.append(f"- **{name}:** {score}/100")
     lines.append("")
-    lines.append("## Detected failure patterns")
+    lines.append("## Detected value barriers")
     for p in patterns:
         lines.append(f"- **{p['name']}:** {p['summary']} {p['implications']}")
     lines.append("")
@@ -102,7 +102,7 @@ def deterministic_markdown(pack):
         lines.append(f"- {a}")
     lines.append("")
     lines.append(f"## 30/60/90 day roadmap — {primary['name']}")
-    lines.append("*Roadmap is specific to the primary failure pattern detected.*")
+    lines.append("*Roadmap is specific to the primary value barrier detected.*")
     lines.append("")
     lines.append("**Next 30 days**")
     for a in roadmap["30"][:3]:
@@ -121,9 +121,9 @@ def deterministic_markdown(pack):
     lines.append("## Diagnostic boundaries")
     lines.append(
         "This diagnostic uses submitted assessment responses, dimension-weighted scoring logic, "
-        "and approved failure-pattern detection rules. It should be treated as an executive "
+        "and approved value-barrier detection rules. It should be treated as an executive "
         "readiness diagnostic, not a full audit, legal review, or financial forecast. "
-        "No personally identifying information or organisational data is stored beyond the active session."
+        "No personally identifying information or organizational data is stored beyond the active session."
     )
     return "\n".join(lines)
 
@@ -142,13 +142,13 @@ def generate_report(scores, responses, context, organization_name="Your organiza
         prompt = f"""
 Create a concise executive diagnostic report for {organization_name}.
 Use ONLY the evidence pack below. Do not repeat every score.
-Focus on interpretation, the root cause of the primary failure pattern, and concrete next steps.
+Focus on interpretation, the root cause of the primary value barrier, and concrete next steps.
 Keep it short enough for a 2-page PDF.
 
 Required sections:
 1. Executive headline — the one thing the leadership team needs to understand
 2. What the results suggest — interpretation, not score recitation
-3. Primary failure pattern — root cause analysis
+3. Primary value barrier — root cause analysis
 4. Evidence signals — what in the responses points to this
 5. Priority actions — concrete, sequenced, owned
 6. 30/60/90 day roadmap — use the pattern-specific roadmap from the evidence pack

@@ -65,8 +65,9 @@ def _styles():
         "body_sm":    s("bs", fontName="Helvetica",         fontSize=7.8,  leading=10.5, textColor=MUTED,  spaceAfter=2),
         "disc":       s("di", fontName="Helvetica-Oblique", fontSize=7,    leading=9.5,  textColor=MUTED,  spaceAfter=2),
         "bullet":     s("bu", fontName="Helvetica",         fontSize=8.2,  leading=11,   textColor=INK,    leftIndent=8,  spaceAfter=2),
-        "score_num":  s("sn", fontName="Helvetica-Bold",    fontSize=34,   leading=38,   textColor=NAVY,   spaceAfter=2),
-        "score_band": s("sb", fontName="Helvetica-Bold",    fontSize=9,    leading=11,   textColor=COBALT, spaceAfter=0),
+        "score_num":  s("sn", fontName="Helvetica-Bold",    fontSize=34,   leading=38,   textColor=NAVY,   spaceAfter=1),
+        "score_band": s("sb", fontName="Helvetica-Bold",    fontSize=13,   leading=16,   textColor=COBALT, spaceAfter=2),
+        "score_desc": s("sd", fontName="Helvetica",         fontSize=8,    leading=10,   textColor=MUTED,  spaceAfter=0),
         "fail_name":  s("fn", fontName="Helvetica-Bold",    fontSize=10,   leading=12,   textColor=NAVY,   spaceAfter=3),
         "rm_hdr":     s("rm", fontName="Helvetica-Bold",    fontSize=7.8,  leading=9.5,  textColor=WHITE),
         "footer_r":   s("fr", fontName="Helvetica-Oblique", fontSize=6.8,  leading=9,    textColor=MUTED,  alignment=TA_RIGHT),
@@ -103,11 +104,11 @@ def build_pdf(pack, report_text=None):
     # ══════════════════════════════════════════════════════════════════════════
     fl.append(_top_rule())
     fl.append(Spacer(1, 10))
-    fl.append(_p("EXECUTIVE DIAGNOSTIC  -  CONFIDENTIAL", ST["eyebrow"]))
+    fl.append(_p("EXECUTIVE DIAGNOSTIC  -  FOR DISCUSSION PURPOSES", ST["eyebrow"]))
     fl.append(_p("AI Transformation Readiness Intelligence", ST["title"]))
     fl.append(_p(
         "A structured diagnostic to identify the most likely reason AI transformation "
-        "fails to create measurable value - before the organisation scales the wrong thing.",
+        "fails to create measurable value - before the organization scales the wrong thing.",
         ST["subtitle"]))
 
     # Meta strip
@@ -136,20 +137,21 @@ def build_pdf(pack, report_text=None):
     fl.append(_hr(COBALT, 0.8, 4, 6))
     fl.append(_p("WHAT THIS DIAGNOSTIC IS FOR", ST["sec"]))
     fl.append(_p(
-        "The technology is deployed. AI is in your organisation. "
-        "The question is whether your organisation is in AI.",
+        "Most organizations have AI tools. Few have AI transformation. "
+        "The technology is deployed. AI is in your organization. "
+        "The question is whether your organization is in AI.",
         ST["body"]))
     fl.append(_p(
-        "Being in AI means AI is embedded in how your organisation makes decisions, designs work, "
+        "Being in AI means AI is embedded in how your organization makes decisions, designs work, "
         "measures value, and develops people. It is not a technology condition - it is an "
-        "organisational one. This diagnostic measures that gap. Complete it in 10-15 minutes. "
+        "organizational one. This diagnostic measures that gap. Complete it in 10-15 minutes. "
         "Use the results to focus on what actually matters.",
         ST["body"]))
 
     fl.append(Spacer(1, 4))
     fl.append(_p("DATA HANDLING AND PRIVACY", ST["sec"]))
     fl.append(_p(
-        "No responses, identity, or organisational data are stored, cached, or transmitted beyond "
+        "No responses, identity, or organizational data are stored, cached, or transmitted beyond "
         "the active session. This application contains no database, analytics tracker, or persistent "
         "storage layer. If an AI narrative is generated, only the structured evidence pack "
         "(scores and patterns - no personally identifying information) is sent to the configured model. "
@@ -190,8 +192,10 @@ def build_pdf(pack, report_text=None):
          _p("READINESS INDICATOR", ST["lbl"])],
         [_p(f"{score} / 100", ST["score_num"]),
          bar_inner],
-        [_p(band_lbl.upper(), ST["score_band"]),
+        [_p(band_lbl, ST["score_band"]),
          _p(f"{score}% readiness score", ST["body_sm"])],
+        [_p(pack["overall_band"]["description"], ST["score_desc"]),
+         _p("", ST["body_sm"])],
     ], colWidths=[W*0.38, W*0.62], hAlign="LEFT")
     score_tbl.setStyle(TableStyle([
         ("BACKGROUND",    (0,0),(-1,-1), SOFT),
@@ -251,7 +255,7 @@ def build_pdf(pack, report_text=None):
 
     # Primary failure banner — two plain cells
     banner = Table([
-        [_p("MOST LIKELY FAILURE POINT", ST["lbl"]),
+        [_p("MOST LIKELY VALUE BARRIER", ST["lbl"]),
          _p("WHAT THIS IMPLIES", ST["lbl"])],
         [_p(pri["name"], ST["fail_name"]),
          _p(pri.get("implications",""), ST["body"])],
@@ -272,8 +276,8 @@ def build_pdf(pack, report_text=None):
     fl.append(banner)
     fl.append(Spacer(1, 10))
 
-    # Detected failure patterns — simple flat table
-    fl.append(_p("DETECTED FAILURE PATTERNS", ST["sec"]))
+    # Detected value barriers — simple flat table
+    fl.append(_p("DETECTED VALUE BARRIERS", ST["sec"]))
     pat_rows = [[_p("Pattern", ST["h2"]), _p("What it means", ST["h2"])]]
     for p in pack["patterns"][:5]:
         pat_rows.append([
@@ -324,7 +328,7 @@ def build_pdf(pack, report_text=None):
     rm = Table([
         [_p("30 DAYS - Establish baseline",   ST["rm_hdr"]),
          _p("60 DAYS - Embed and equip",      ST["rm_hdr"]),
-         _p("90 DAYS - Operationalise value", ST["rm_hdr"])],
+         _p("90 DAYS - Operationalize value", ST["rm_hdr"])],
         [_p(_rm(roadmap["30"]), ST["body_sm"]),
          _p(_rm(roadmap["60"]), ST["body_sm"]),
          _p(_rm(roadmap["90"]), ST["body_sm"])],

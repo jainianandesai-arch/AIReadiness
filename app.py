@@ -250,6 +250,7 @@ div[role="radiogroup"] label:hover {
   letter-spacing: -.02em;
 }
 .kpi-caption { color: var(--muted); font-size: .82rem; margin-top: .3rem; }
+.kpi-band { color: var(--cobalt); font-size: 1.0rem; font-weight: 700; margin-top: .2rem; letter-spacing: -.01em; }
 
 /* ── Signal box ── */
 .signal-box {
@@ -282,11 +283,12 @@ st.markdown('<div class="app-eyebrow">Executive diagnostic</div>', unsafe_allow_
 st.markdown('<div class="app-title">AI Transformation Readiness Intelligence</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="app-subtitle">'
-    'The technology is deployed. AI is in your organisation. The question is whether your organisation is in AI.'
-    '<br/><br/>'
-    'Being in AI means AI is embedded in how your organisation makes decisions, designs work, measures value, '
-    'and develops people. It is not a technology condition — it is an organisational one. '
-    'This diagnostic measures that gap. Complete it in 10-15 minutes. Use the results to focus on what actually matters.'
+    'Most organizations have AI tools. Few have AI transformation.<br/><br/>'
+    'The technology is deployed. AI is in your organization. The question is whether your organization is in AI.<br/><br/>'
+    'Being in AI means AI is embedded in how your organization makes decisions, designs work, measures value, '
+    'and develops people. It is not a technology condition — it is an organizational one. '
+    'This diagnostic helps identify where AI value may get stuck — across leadership, workflow, governance, '
+    'measurement, manager capability, and the path from pilot to scale.'
     '</div>',
     unsafe_allow_html=True,
 )
@@ -294,22 +296,22 @@ st.markdown(
 # ── Privacy banner ───────────────────────────────────────────────────────────
 st.markdown(
     '<div class="privacy-banner">'
-    '<strong>Privacy &amp; data handling:</strong> No responses, identity, or organisational data '
-    'are stored, cached, or transmitted beyond this active browser session. This application contains '
-    'no database, analytics tracker, or persistent storage layer. If an AI narrative is generated, '
-    'only the structured evidence pack (scores and patterns — no personally identifying information) '
-    'is sent to the configured model. All data is cleared when you close this tab.'
+    '<strong>Privacy &amp; data handling:</strong> This application does not use a database, '
+    'analytics tracker, or persistent storage layer. Responses are used only during the active '
+    'browser session to generate the diagnostic. If an AI narrative is generated, only a structured '
+    'evidence pack containing scores and detected patterns is sent to the configured model. '
+    'Do not enter confidential, personal, or regulated information.'
     '</div>',
     unsafe_allow_html=True,
 )
 
-# ── Organisation context ─────────────────────────────────────────────────────
-st.markdown('<div class="sec-label">Organisation context</div>', unsafe_allow_html=True)
+# ── Organization context ─────────────────────────────────────────────────────
+st.markdown('<div class="sec-label">Organization context</div>', unsafe_allow_html=True)
 
 ctx1, ctx2, ctx3 = st.columns([1.0, 1.4, 1.4], gap="medium")
 
 with ctx1:
-    st.markdown('<div class="ctx-card"><div class="ctx-card-label">Organisation</div>'
+    st.markdown('<div class="ctx-card"><div class="ctx-card-label">Organization</div>'
                 '<div class="ctx-card-title">Name or placeholder</div>', unsafe_allow_html=True)
     org = st.text_input(
         "org_name",
@@ -410,7 +412,7 @@ if "last_pack" in st.session_state:
     pack      = st.session_state["last_pack"]
     report_md = st.session_state["last_report_md"]
     mode      = st.session_state["last_mode"]
-    primary   = pack["primary_failure_point"]
+    primary   = pack["primary_value_barrier"]
 
     st.markdown("---")
     st.markdown('<div class="sec-label">Executive diagnostic output</div>', unsafe_allow_html=True)
@@ -420,12 +422,13 @@ if "last_pack" in st.session_state:
         st.markdown(
             f'<div class="kpi-card"><div class="kpi-label">Overall readiness</div>'
             f'<div class="kpi-value">{pack["overall_score"]}/100</div>'
-            f'<div class="kpi-caption">{pack["overall_band"]["label"]}</div></div>',
+            f'<div class="kpi-band">{pack["overall_band"]["label"]}</div>'
+            f'<div class="kpi-caption">{pack["overall_band"]["description"]}</div></div>',
             unsafe_allow_html=True,
         )
     with k2:
         st.markdown(
-            f'<div class="kpi-card"><div class="kpi-label">Most likely failure point</div>'
+            f'<div class="kpi-card"><div class="kpi-label">Most likely value barrier</div>'
             f'<div class="kpi-value">{primary["name"]}</div>'
             f'<div class="kpi-caption">{primary["summary"]}</div></div>',
             unsafe_allow_html=True,
@@ -463,13 +466,21 @@ if "last_pack" in st.session_state:
         for a in seen[:5]:
             st.write(f"- {a}")
 
-        with st.expander("Detected failure patterns", expanded=False):
+        with st.expander("Detected value barriers", expanded=False):
             for p in pack["patterns"][:5]:
                 st.markdown(f"**{p['name']}**")
                 st.caption(p["summary"])
 
     with st.expander("View executive narrative", expanded=False):
-        st.markdown(report_md)
+        pri = pack["primary_failure_point"]
+        st.markdown(
+            f"**{pack['organization_name']}** scores **{pack['overall_score']}/100** "
+            f"({pack['overall_band']['label']}). "
+            f"{pack['overall_band']['description']}\n\n"
+            f"**Most likely value barrier: {pri['name']}**\n\n"
+            f"{pri['summary']} {pri.get('implications', '')}\n\n"
+            f"**What to do first:** {pri['actions'][0] if pri.get('actions') else ''}"
+        )
 
     pdf_bytes = build_pdf(pack, report_md)
     dl1, dl2 = st.columns(2, gap="medium")
