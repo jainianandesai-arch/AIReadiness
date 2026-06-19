@@ -409,99 +409,35 @@ if run:
 
 # ── Output ────────────────────────────────────────────────────────────────────
 if "last_pack" in st.session_state:
-    pack = st.session_state.get("last_pack", {})
-    report_md = st.session_state.get("last_report_md", "")
-    mode = st.session_state.get("last_mode", "rules-based")
-
-    default_primary = {
-        "name": "AI value is not yet consistently connected to business execution",
-        "summary": (
-            "The organization appears to have AI activity, but the path from AI usage "
-            "to measurable business value is not yet sufficiently defined."
-        ),
-        "implications": (
-            "Without clearer workflow ownership, decision rights, and outcome measures, "
-            "AI may remain a set of tools rather than a transformation capability."
-        ),
-        "actions": [
-            "Identify 2–3 priority workflows where AI should create measurable value.",
-            "Assign accountable owners for each workflow.",
-            "Define success measures before scaling.",
-            "Establish governance and human review checkpoints.",
-        ],
-        "roadmap": {
-            "30": [
-                "Select priority workflows.",
-                "Assign accountable business owners.",
-                "Define success measures.",
-            ],
-            "60": [
-                "Run controlled pilots.",
-                "Document decision rights.",
-                "Identify capability gaps.",
-            ],
-            "90": [
-                "Scale what works.",
-                "Create an AI operating rhythm.",
-                "Convert lessons into playbooks.",
-            ],
-        },
-        "evidence": [],
-    }
-
-    primary = pack.get("primary_value_barrier")
-
-    if primary is None:
-        patterns = pack.get("patterns", [])
-        primary = patterns[0] if patterns else default_primary
-
-    if isinstance(primary, str):
-        primary = {
-            **default_primary,
-            "name": primary,
-        }
-
-    if not isinstance(primary, dict):
-        primary = default_primary
-
-    primary.setdefault("name", default_primary["name"])
-    primary.setdefault("summary", default_primary["summary"])
-    primary.setdefault("implications", default_primary["implications"])
-    primary.setdefault("actions", default_primary["actions"])
-    primary.setdefault("roadmap", default_primary["roadmap"])
-    primary.setdefault("evidence", [])
-
-    pack["primary_value_barrier"] = primary
-    pack["primary_failure_point"] = primary  # compatibility for older app/pdf code
-
-    overall_band = pack.get("overall_band", {})
-    if not isinstance(overall_band, dict):
-        overall_band = {"label": str(overall_band), "description": ""}
-    overall_band.setdefault("label", "Not enough evidence")
-    overall_band.setdefault("description", "")
+    pack      = st.session_state["last_pack"]
+    report_md = st.session_state["last_report_md"]
+    mode      = st.session_state["last_mode"]
+    primary   = pack["primary_failure_point"]
 
     st.markdown("---")
     st.markdown('<div class="sec-label">Executive diagnostic output</div>', unsafe_allow_html=True)
 
-    k1, k2, k3 = st.columns([.9, 1.35, 1.1], gap="medium")
+    # ── Executive narrative — at the top, always visible ─────────────────────
+    st.markdown(report_md)
+    st.markdown("---")
 
+    # ── KPI cards ─────────────────────────────────────────────────────────────
+    k1, k2, k3 = st.columns([.9, 1.35, 1.1], gap="medium")
     with k1:
         st.markdown(
             f'<div class="kpi-card"><div class="kpi-label">Overall readiness</div>'
-            f'<div class="kpi-value">{pack.get("overall_score", 0)}/100</div>'
-            f'<div class="kpi-band">{overall_band.get("label", "Not enough evidence")}</div>'
-            f'<div class="kpi-caption">{overall_band.get("description", "")}</div></div>',
+            f'<div class="kpi-value">{pack["overall_score"]}/100</div>'
+            f'<div class="kpi-band">{pack["overall_band"]["label"]}</div>'
+            f'<div class="kpi-caption">{pack["overall_band"]["description"]}</div></div>',
             unsafe_allow_html=True,
         )
-
     with k2:
         st.markdown(
             f'<div class="kpi-card"><div class="kpi-label">Most likely value barrier</div>'
-            f'<div class="kpi-value">{primary.get("name", default_primary["name"])}</div>'
-            f'<div class="kpi-caption">{primary.get("summary", default_primary["summary"])}</div></div>',
+            f'<div class="kpi-value">{primary["name"]}</div>'
+            f'<div class="kpi-caption">{primary["summary"]}</div></div>',
             unsafe_allow_html=True,
         )
-
     with k3:
         st.markdown(
             f'<div class="kpi-card"><div class="kpi-label">Diagnostic mode</div>'
@@ -511,70 +447,37 @@ if "last_pack" in st.session_state:
         )
 
     st.markdown('<div style="height:.9rem"></div>', unsafe_allow_html=True)
-
     p1, p2 = st.columns([1.1, 1], gap="large")
 
     with p1:
-        st.markdown(
-            '<div class="sec-label" style="margin-top:0">Readiness profile</div>',
-            unsafe_allow_html=True,
-        )
-
-        section_scores = pack.get("section_scores", {})
-        if section_scores:
-            for section, score in section_scores.items():
-                st.caption(f"{section}: {score}/100")
-                st.progress(score / 100)
-        else:
-            st.caption("Section scores were not available.")
+        st.markdown('<div class="sec-label" style="margin-top:0">Readiness profile</div>',
+                    unsafe_allow_html=True)
+        for section, score in pack["section_scores"].items():
+            st.caption(f"{section}: {score}/100")
+            st.progress(score / 100)
 
         st.markdown('<div class="sec-label">Evidence signals</div>', unsafe_allow_html=True)
-        evidence = primary.get("evidence", [])
-        if evidence:
-            for e in evidence[:3]:
-                st.markdown(f'<div class="signal-box">{e}</div>', unsafe_allow_html=True)
-        else:
-            st.caption("Evidence signals are summarized in the executive narrative.")
+        for e in primary.get("evidence", [])[:3]:
+            st.markdown(f'<div class="signal-box">{e}</div>', unsafe_allow_html=True)
 
     with p2:
-        st.markdown(
-            '<div class="sec-label" style="margin-top:0">Priority actions</div>',
-            unsafe_allow_html=True,
-        )
-
+        st.markdown('<div class="sec-label" style="margin-top:0">Priority actions</div>',
+                    unsafe_allow_html=True)
         seen = []
-        for p in pack.get("patterns", [])[:3]:
+        for p in pack["patterns"][:3]:
             for a in p.get("actions", []):
                 if a not in seen:
                     seen.append(a)
-
-        if not seen:
-            seen = primary.get("actions", [])
-
         for a in seen[:5]:
             st.write(f"- {a}")
 
         with st.expander("Detected value barriers", expanded=False):
-            for p in pack.get("patterns", [])[:5]:
-                st.markdown(f"**{p.get('name', 'Detected value barrier')}**")
-                st.caption(p.get("summary", ""))
-
-    with st.expander("View executive narrative", expanded=False):
-        st.markdown(
-            f"**{pack.get('organization_name', 'Your organization')}** scores "
-            f"**{pack.get('overall_score', 0)}/100** "
-            f"({overall_band.get('label', 'Not enough evidence')}). "
-            f"{overall_band.get('description', '')}\n\n"
-            f"**Most likely value barrier: {primary.get('name', default_primary['name'])}**\n\n"
-            f"{primary.get('summary', '')} {primary.get('implications', '')}\n\n"
-            f"**What to do first:** "
-            f"{primary.get('actions', [''])[0] if primary.get('actions') else ''}"
-        )
+            for p in pack["patterns"][:5]:
+                st.markdown(f"**{p['name']}**")
+                st.caption(p["summary"])
 
     pdf_bytes = build_pdf(pack, report_md)
-
     dl1, dl2 = st.columns(2, gap="medium")
-
     with dl1:
         st.download_button(
             "Download executive PDF",
@@ -583,7 +486,6 @@ if "last_pack" in st.session_state:
             mime="application/pdf",
             use_container_width=True,
         )
-
     with dl2:
         st.download_button(
             "Download report markdown",
@@ -592,7 +494,6 @@ if "last_pack" in st.session_state:
             mime="text/markdown",
             use_container_width=True,
         )
-
 else:
     st.info("Complete the diagnostic and click **Generate executive diagnostic**.")
 
