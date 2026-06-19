@@ -628,8 +628,6 @@ if "last_pack" in st.session_state:
             mime="application/pdf",
             use_container_width=True,
         )
-            use_container_width=True,
-        )
 else:
     st.info("Complete the diagnostic and click **Generate executive diagnostic**.")
 
