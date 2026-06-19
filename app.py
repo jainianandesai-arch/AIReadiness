@@ -174,6 +174,87 @@ CSS = """
 }
 .app-footer span { color: var(--cobalt); font-weight: 700; }
 
+/* ── Executive narrative card ── */
+.narr-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.2rem;
+}
+.narr-score-line {
+  font-size: 1.15rem;
+  font-weight: 780;
+  color: var(--navy);
+  margin-bottom: .2rem;
+}
+.narr-score-desc {
+  font-size: .88rem;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+.narr-divider {
+  border-top: 1px solid var(--line);
+  margin: .9rem 0;
+}
+.narr-sec-label {
+  font-size: .67rem;
+  font-weight: 800;
+  color: var(--cobalt);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  margin-bottom: .4rem;
+}
+.narr-barrier-name {
+  font-size: 1.05rem;
+  font-weight: 740;
+  color: var(--navy);
+  margin-bottom: .3rem;
+}
+.narr-barrier-body {
+  font-size: .88rem;
+  color: var(--ink);
+  line-height: 1.5rem;
+}
+.narr-pattern {
+  font-size: .86rem;
+  color: var(--ink);
+  line-height: 1.45rem;
+  margin-bottom: .3rem;
+  padding-left: .5rem;
+  border-left: 2px solid var(--cobalt);
+}
+.narr-action {
+  font-size: .86rem;
+  color: var(--ink);
+  line-height: 1.45rem;
+  margin-bottom: .3rem;
+}
+.narr-rm-phase {
+  font-size: .80rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: .6rem 0 .2rem 0;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.narr-rm-item {
+  font-size: .85rem;
+  color: var(--ink);
+  line-height: 1.45rem;
+  margin-bottom: .2rem;
+  padding-left: .5rem;
+}
+.narr-boundary {
+  font-size: .74rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: .9rem;
+  padding-top: .7rem;
+  border-top: 1px solid var(--line);
+  line-height: 1.4rem;
+}
+
 /* ── Radio overrides ── */
 div[role="radiogroup"] label {
   background: var(--panel);
@@ -410,15 +491,68 @@ if run:
 # ── Output ────────────────────────────────────────────────────────────────────
 if "last_pack" in st.session_state:
     pack      = st.session_state["last_pack"]
-    report_md = st.session_state["last_report_md"]
+    narrative = st.session_state["last_report_md"]
     mode      = st.session_state["last_mode"]
     primary   = pack["primary_failure_point"]
 
     st.markdown("---")
     st.markdown('<div class="sec-label">Executive diagnostic output</div>', unsafe_allow_html=True)
 
-    # ── Executive narrative — at the top, always visible ─────────────────────
-    st.markdown(report_md)
+    # ── Executive narrative — clean HTML, no markdown ─────────────────────────
+    # Opening — use GPT interpretation if available, otherwise structured data
+    if narrative.get("gpt_narrative"):
+        opening_html = f'<div class="narr-barrier-body">{narrative["gpt_narrative"]}</div>'
+    else:
+        opening_html = (
+            f'<div class="narr-barrier-name">{narrative["barrier_name"]}</div>'
+            f'<div class="narr-barrier-body">{narrative["barrier_body"]}</div>'
+        )
+
+    patterns_html = "".join(
+        f'<div class="narr-pattern"><strong>{p["name"]}</strong> — {p["summary"]}</div>'
+        for p in narrative["patterns"]
+    )
+    actions_html = "".join(
+        f'<div class="narr-action">&#9654;&nbsp; {a}</div>'
+        for a in narrative["actions"]
+    )
+    def rm_items(items):
+        return "".join(f'<div class="narr-rm-item">&#8212;&nbsp; {x}</div>' for x in items)
+
+    st.markdown(f"""
+<div class="narr-card">
+  <div class="narr-score-line">{narrative["score_line"]}</div>
+  <div class="narr-score-desc">{narrative["score_desc"]}</div>
+
+  <div class="narr-divider"></div>
+
+  <div class="narr-sec-label">MOST LIKELY VALUE BARRIER</div>
+  {opening_html}
+
+  <div class="narr-divider"></div>
+
+  <div class="narr-sec-label">WHAT THE RESULTS SUGGEST</div>
+  {patterns_html}
+
+  <div class="narr-divider"></div>
+
+  <div class="narr-sec-label">PRIORITY ACTIONS</div>
+  {actions_html}
+
+  <div class="narr-divider"></div>
+
+  <div class="narr-sec-label">30 / 60 / 90 DAY ROADMAP — {narrative["roadmap_label"].upper()}</div>
+  <div class="narr-rm-phase">{narrative["phase_30_label"]}</div>
+  {rm_items(narrative["roadmap_30"])}
+  <div class="narr-rm-phase">{narrative["phase_60_label"]}</div>
+  {rm_items(narrative["roadmap_60"])}
+  <div class="narr-rm-phase">{narrative["phase_90_label"]}</div>
+  {rm_items(narrative["roadmap_90"])}
+
+  <div class="narr-boundary">{narrative["boundary"]}</div>
+</div>
+""", unsafe_allow_html=True)
+
     st.markdown("---")
 
     # ── KPI cards ─────────────────────────────────────────────────────────────
@@ -476,7 +610,7 @@ if "last_pack" in st.session_state:
                 st.markdown(f"**{p['name']}**")
                 st.caption(p["summary"])
 
-    pdf_bytes = build_pdf(pack, report_md)
+    pdf_bytes = build_pdf(pack, None)
     dl1, dl2 = st.columns(2, gap="medium")
     with dl1:
         st.download_button(
@@ -488,10 +622,12 @@ if "last_pack" in st.session_state:
         )
     with dl2:
         st.download_button(
-            "Download report markdown",
-            data=report_md,
-            file_name="ai_transformation_readiness_report.md",
-            mime="text/markdown",
+            "Download report PDF",
+            data=pdf_bytes,
+            file_name="ai_transformation_readiness_report.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
             use_container_width=True,
         )
 else:

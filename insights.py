@@ -230,6 +230,72 @@ ROADMAP_BY_PATTERN = {
 }
 
 # Generic fallback (used if a pattern is not in ROADMAP_BY_PATTERN)
+# Pattern-specific phase labels — what each 30/60/90 phase is called
+# for this particular failure mode. Makes it clear the roadmap is
+# diagnostic-driven, not generic.
+ROADMAP_PHASE_LABELS = {
+    "AI Theatre Risk": {
+        "30": "Establish value accountability",
+        "60": "Build measurement discipline",
+        "90": "Shift from activity to impact",
+    },
+    "Pilot Purgatory": {
+        "30": "Diagnose the pipeline blockage",
+        "60": "Build the path from pilot to practice",
+        "90": "Operationalize your strongest pilots",
+    },
+    "Manager Bottleneck": {
+        "30": "Assess manager readiness",
+        "60": "Equip managers to redesign work",
+        "90": "Embed work redesign into leadership practice",
+    },
+    "Last-Mile Workflow Failure": {
+        "30": "Audit what actually changed after training",
+        "60": "Redesign workflows with AI built in",
+        "90": "Measure workflow change, not tool usage",
+    },
+    "Trust Calibration Gap": {
+        "30": "Define when to trust, challenge, or reject AI output",
+        "60": "Build role-level calibration guidance",
+        "90": "Institutionalize human judgment protocols",
+    },
+    "Governance Vacuum": {
+        "30": "Establish minimum guardrails",
+        "60": "Build practical decision guidance",
+        "90": "Formalize governance as an enabler",
+    },
+    "Governance Drag": {
+        "30": "Identify what governance is blocking",
+        "60": "Create tiered decision rights",
+        "90": "Make governance an adoption accelerator",
+    },
+    "Shadow AI Risk": {
+        "30": "Understand what employees are actually using",
+        "60": "Close the gap with approved alternatives",
+        "90": "Build a non-punitive visibility culture",
+    },
+    "Change Saturation Risk": {
+        "30": "Map AI adoption against change capacity",
+        "60": "Sequence and simplify the AI agenda",
+        "90": "Resume adoption with capacity in mind",
+    },
+    "Workforce Impact Blind Spot": {
+        "30": "Assess people impact for in-flight initiatives",
+        "60": "Build workforce impact into the intake process",
+        "90": "Connect AI planning to workforce planning",
+    },
+    "Value Measurement Blind Spot": {
+        "30": "Establish baselines — even retrospectively",
+        "60": "Build measurement into every initiative",
+        "90": "Publish results and tie investment to evidence",
+    },
+    "Focused Scale Opportunity": {
+        "30": "Identify and confirm the highest-leverage gap",
+        "60": "Execute a targeted improvement",
+        "90": "Measure, learn, and identify the next constraint",
+    },
+}
+
 ROADMAP_GENERIC = {
     "30": [
         "Name the accountable business owner for AI adoption and value realisation.",
@@ -320,6 +386,11 @@ def detect_failure_patterns(scores):
                 "implications": implications,
                 "actions":     ACTIONS_BY_PATTERN.get(name, []),
                 "roadmap":     ROADMAP_BY_PATTERN.get(name, ROADMAP_GENERIC),
+                "phase_labels": ROADMAP_PHASE_LABELS.get(name, {
+                    "30": "Establish baseline",
+                    "60": "Embed and equip",
+                    "90": "Operationalize value",
+                }),
             })
 
     # Dimension signals
@@ -442,6 +513,7 @@ def build_evidence_pack(scores, responses, context, organization_name):
         "weakest_dimensions":   scores["weakest_dimensions"],
         "patterns":             patterns,
         "primary_failure_point": primary,
-        "roadmap":              primary["roadmap"],   # pattern-specific
+        "roadmap":              primary["roadmap"],
+        "roadmap_phase_labels": primary["phase_labels"],
         "responses":            responses,
     }
