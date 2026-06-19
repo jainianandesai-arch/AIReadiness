@@ -610,24 +610,14 @@ if "last_pack" in st.session_state:
                 st.markdown(f"**{p['name']}**")
                 st.caption(p["summary"])
 
-    pdf_bytes = build_pdf(pack, None)
-    dl1, dl2 = st.columns(2, gap="medium")
-    with dl1:
-        st.download_button(
-            "Download executive PDF",
-            data=pdf_bytes,
-            file_name="ai_transformation_readiness_report.pdf",
-            mime="application/pdf",
-            use_container_width=True,
-        )
-    with dl2:
-        st.download_button(
-            "Download report PDF",
-            data=pdf_bytes,
-            file_name="ai_transformation_readiness_report.pdf",
-            mime="application/pdf",
-            use_container_width=True,
-        )
+    pdf_bytes = build_pdf(pack, narrative)
+    st.download_button(
+        "Download executive PDF",
+        data=pdf_bytes,
+        file_name="ai_transformation_readiness_report.pdf",
+        mime="application/pdf",
+        use_container_width=True,
+    )
 else:
     st.info("Complete the diagnostic and click **Generate executive diagnostic**.")
 
