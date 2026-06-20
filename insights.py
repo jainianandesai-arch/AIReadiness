@@ -448,15 +448,18 @@ def detect_failure_patterns(scores):
             "Adoption may become inconsistent, risky, or dependent on individual judgment rather than defined criteria.")
 
     # Governance Vacuum vs Drag (mutually exclusive)
-    if governance < 35:
+    # Vacuum: governance is critically absent (score < 25 — no rules exist at all)
+    # Drag:   governance exists but blocks progress (25-59) AND execution is also weak
+    if governance < 25:
         add("Governance Vacuum", 95 - governance,
             "AI governance is too weak to support safe experimentation or scale.",
-            ["Governance usability is critically low"],
+            ["Governance usability is critically low — no effective rules or guardrails exist"],
             "Teams may avoid AI because they are unsure what is allowed — or use it without any guardrails.")
     elif governance < 60 and execution < 60:
-        add("Governance Drag", 80 - governance,
+        add("Governance Drag", 88 - governance,
             "Governance exists but may not be clear or usable enough to enable progress.",
-            ["Governance usability and execution pathway are both below strong readiness"],
+            ["Governance usability and execution pathway are both below strong readiness",
+             "Policy may exist but people cannot translate it into practical decisions"],
             "AI adoption may slow because people cannot translate policy into practical decisions.")
 
     # Shadow AI Risk
