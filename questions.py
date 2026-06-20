@@ -17,10 +17,10 @@ recoverable or situation-dependent.
 
 Q4 and Q5 (previously "Experimentation pathway" and "Scale discipline") are
 now unified under "Execution pathway" — they measure the same underlying
-construct (does the organisation have a functioning pipeline from idea to
+construct (does the organization have a functioning pipeline from idea to
 operating practice?) and scored separately they double-counted that weakness.
 The new Q5 replaces "Scale discipline" with "Value attribution discipline" —
-measuring whether the organisation can distinguish AI causation from
+measuring whether the organization can distinguish AI causation from
 correlation in its outcomes, which is the most common measurement failure
 at mid-to-late maturity.
 """
@@ -29,7 +29,7 @@ CONTEXT_QUESTIONS = [
     {
         "id": "C1",
         "label": "AI journey stage",
-        "question": "Where is your organisation today in its AI journey?",
+        "question": "Where is your organization today in its AI journey?",
         "options": [
             "Mostly exploring",
             "Running small pilots",
@@ -60,7 +60,7 @@ QUESTIONS = [
         "dimension": "Value discipline",
         "weight_tier": 1,
         "short": "Business problem discipline",
-        "question": "Before starting an AI initiative, how clearly does your organisation define the business problem it is trying to solve?",
+        "question": "Before starting an AI initiative, how clearly does your organization define the business problem it is trying to solve?",
         "options": [
             "The problem is rarely defined — tools are chosen first",
             "The problem is usually defined after the tool is selected",
@@ -120,7 +120,7 @@ QUESTIONS = [
         "dimension": "Measurement discipline",
         "weight_tier": 2,
         "short": "Value attribution discipline",
-        "question": "When AI initiatives show positive results, how confident is the organisation that AI caused the improvement — rather than other factors?",
+        "question": "When AI initiatives show positive results, how confident is the organization that AI caused the improvement — rather than other factors?",
         "options": [
             "No measurement exists — results are assumed or asserted",
             "Results are tracked but attribution to AI is not examined",
@@ -227,7 +227,7 @@ QUESTIONS = [
         "dimension": "Workforce impact",
         "weight_tier": 2,
         "short": "Workforce impact planning",
-        "question": "Before AI changes a process, how proactively does the organisation assess impact on roles, skills, workload, and employee experience?",
+        "question": "Before AI changes a process, how proactively does the organization assess impact on roles, skills, workload, and employee experience?",
         "options": [
             "It does not assess this — changes are made without people impact analysis",
             "It reacts to concerns after they surface",
@@ -244,7 +244,7 @@ QUESTIONS = [
         "dimension": "Governance usability",
         "weight_tier": 1,
         "short": "Governance usability",
-        "question": "Which statement best describes AI governance in your organisation — focusing on whether people can actually use it to make decisions?",
+        "question": "Which statement best describes AI governance in your organization — focusing on whether people can actually use it to make decisions?",
         "options": [
             "Governance does not exist — there are no rules or guardrails",
             "Governance exists as policy but is not accessible or used in practice",
@@ -259,9 +259,9 @@ QUESTIONS = [
         "dimension": "Shadow AI visibility",
         "weight_tier": 2,
         "short": "Shadow AI visibility",
-        "question": "How much visibility does the organisation have into employees using unapproved or consumer AI tools for work — and what is the response?",
+        "question": "How much visibility does the organization have into employees using unapproved or consumer AI tools for work — and what is the response?",
         "options": [
-            "No visibility — the organisation does not know what is being used",
+            "No visibility — the organization does not know what is being used",
             "Very limited visibility with no structured response",
             "Some awareness, but no consistent policy or safer alternatives offered",
             "Reasonable visibility, guidance in place, and approved alternatives available",
@@ -274,7 +274,7 @@ QUESTIONS = [
         "dimension": "Change capacity",
         "weight_tier": 3,
         "short": "Change capacity",
-        "question": "How much organisational change is currently competing for employee and manager attention — and has AI adoption been sequenced with this in mind?",
+        "question": "How much organizational change is currently competing for employee and manager attention — and has AI adoption been sequenced with this in mind?",
         "options": [
             "Too many initiatives — people cannot absorb more change",
             "Heavy change load with visible fatigue affecting AI adoption",

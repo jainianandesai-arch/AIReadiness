@@ -17,7 +17,7 @@ Pattern detection logic:
 Roadmap logic:
   The 30/60/90 roadmap is pattern-specific. Each pattern has its own
   sequenced actions. The generic library is used only as a final fallback.
-  Pattern-specific roadmaps prioritise the root cause of the detected
+  Pattern-specific roadmaps prioritize the root cause of the detected
   failure, not generic AI transformation advice.
 """
 
@@ -53,7 +53,7 @@ ROADMAP_BY_PATTERN = {
         ],
         "90": [
             "Convert at least one strong pilot into standard operating practice with documented ownership.",
-            "Create a public internal record of what scaled, what was parked, and why — normalise both outcomes.",
+            "Create a public internal record of what scaled, what was parked, and why — normalize both outcomes.",
             "Establish a quarterly portfolio review: pipeline health, stage distribution, value in operation.",
         ],
     },
@@ -71,7 +71,7 @@ ROADMAP_BY_PATTERN = {
         "90": [
             "Build manager capability into the standard people leader development programme.",
             "Track the ratio of AI-enabled work redesign to AI tool deployment — close the gap.",
-            "Recognise and promote managers who successfully redesign work, not just those who drive tool usage.",
+            "Recognize and promote managers who successfully redesign work, not just those who drive tool usage.",
         ],
     },
     "Last-Mile Workflow Failure": {
@@ -213,7 +213,7 @@ ROADMAP_BY_PATTERN = {
     "Focused Scale Opportunity": {
         "30": [
             "Identify the specific dimension holding back the next level of value and confirm it with 5-10 interviews.",
-            "Prioritise one improvement that would have the highest impact on AI value realisation in the next 90 days.",
+            "Prioritize one improvement that would have the highest impact on AI value realization in the next 90 days.",
             "Build a concrete action plan for that single dimension — not a broad AI strategy refresh.",
         ],
         "60": [
@@ -298,8 +298,8 @@ ROADMAP_PHASE_LABELS = {
 
 ROADMAP_GENERIC = {
     "30": [
-        "Name the accountable business owner for AI adoption and value realisation.",
-        "Prioritise 3-5 AI use cases using business value, workflow fit, risk, and scale potential.",
+        "Name the accountable business owner for AI adoption and value realization.",
+        "Prioritize 3-5 AI use cases using business value, workflow fit, risk, and scale potential.",
         "Define baseline metrics before expanding any active pilot.",
     ],
     "60": [
@@ -497,7 +497,7 @@ def detect_failure_patterns(scores):
         add("Focused Scale Opportunity", 35,
             f"Readiness is broadly solid — the most actionable improvement area is {weakest[0].lower()}.",
             [f"Lowest readiness dimension: {weakest[0]} ({weakest[1]}/100)"],
-            "The organization has a working foundation; targeted improvement in this dimension would strengthen AI value realisation.")
+            "The organization has a working foundation; targeted improvement in this dimension would strengthen AI value realization.")
 
     return sorted(patterns, key=lambda p: p["severity"], reverse=True)[:5]
 

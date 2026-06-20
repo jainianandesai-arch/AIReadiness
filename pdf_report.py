@@ -313,10 +313,25 @@ def build_pdf(pack, narrative=None):
     fl.append(Spacer(1, 14))
 
     # Each phase — full width, one row per action
+    # Phase labels come from narrative dict (pattern-specific)
+    phase_labels = {}
+    if narrative:
+        phase_labels = {
+            "30": narrative.get("phase_30_label", "30 days — Establish baseline").split(" — ", 1)[-1],
+            "60": narrative.get("phase_60_label", "60 days — Embed and equip").split(" — ", 1)[-1],
+            "90": narrative.get("phase_90_label", "90 days — Operationalize value").split(" — ", 1)[-1],
+        }
+    else:
+        phase_labels = {
+            "30": "Establish baseline",
+            "60": "Embed and equip",
+            "90": "Operationalize value",
+        }
+
     phases = [
-        ("30 DAYS", "Establish baseline",   roadmap["30"]),
-        ("60 DAYS", "Embed and equip",      roadmap["60"]),
-        ("90 DAYS", "Operationalize value", roadmap["90"]),
+        ("30 DAYS", phase_labels["30"], roadmap["30"]),
+        ("60 DAYS", phase_labels["60"], roadmap["60"]),
+        ("90 DAYS", phase_labels["90"], roadmap["90"]),
     ]
     for phase_label, phase_sub, items in phases:
         hdr = Table([[

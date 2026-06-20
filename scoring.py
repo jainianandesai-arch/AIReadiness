@@ -3,7 +3,7 @@ scoring.py — AI Transformation Readiness Intelligence
 
 Scoring model:
   Raw response: 1-5 Likert scale
-  Normalised: (raw-1)/4 × 100 → 0, 25, 50, 75, 100
+  Normalized: (raw-1)/4 × 100 → 0, 25, 50, 75, 100
 
   Overall score: dimension-weighted average (not question-weighted)
   Each dimension score = average of its constituent question scores
@@ -56,18 +56,18 @@ def calculate_scores(responses: dict) -> dict:
 
     for q in QUESTIONS:
         raw        = int(responses.get(q["id"], 3))
-        normalised = score_to_100(raw)
+        normalized = score_to_100(raw)
         q_scores[q["id"]] = {
             "raw":             raw,
-            "score":           normalised,
+            "score":           normalized,
             "section":         q["section"],
             "dimension":       q["dimension"],
             "weight_tier":     q.get("weight_tier", 3),
             "short":           q["short"],
             "selected_option": q["options"][raw - 1],
         }
-        section_values[q["section"]].append(normalised)
-        dimension_values[q["dimension"]].append(normalised)
+        section_values[q["section"]].append(normalized)
+        dimension_values[q["dimension"]].append(normalized)
 
     # Section scores — unweighted, for display
     section_scores = {
