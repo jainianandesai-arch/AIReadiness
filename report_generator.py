@@ -31,8 +31,9 @@ STRICT RULES:
 - Do not include scoring methodology, dimension weights, or technical details.
 - Do not recommend surveillance, punitive monitoring, or layoffs.
 - Write like a trusted senior advisor briefing a CHRO or CEO — direct, honest, specific.
-- Keep it concise — 4 short paragraphs maximum.
+- Write exactly 2 short paragraphs. Maximum 3 sentences per paragraph.
 - Do not use bullet points or headers. Flowing prose only.
+- Be concise. A leader should be able to read this in under 30 seconds.
 """.strip()
 
 
@@ -81,43 +82,26 @@ def _build_prompt(pack, organization_name):
     primary  = pack["primary_failure_point"]
     patterns = pack["patterns"][:3]
     return f"""
-Write a concise executive narrative for {organization_name}.
+Write a concise executive narrative for {organization_name}. Exactly 2 short paragraphs, 3 sentences max each.
 
-Use ONLY the diagnostic data below. Write 4 short paragraphs:
+Paragraph 1: What the overall score means for this organization. Name the primary value barrier and why it is the most critical thing to address right now.
 
-Paragraph 1: What the overall score and band mean for this specific organization.
-Name the primary value barrier and explain why it matters most given their scores.
+Paragraph 2: What the combination of detected value barriers reveals about where this organization is getting stuck. End with one concrete thing leadership should do in the next 30 days.
 
-Paragraph 2: What the combination of detected value barriers reveals about where
-this organization is getting stuck in its AI transformation. Be specific — name
-the patterns and connect them to each other.
-
-Paragraph 3: What the leadership team should focus on in the next 30 days.
-Ground this in the primary value barrier and the specific section scores below.
-
-Paragraph 4: What success looks like at 90 days if the organization acts on this.
-Make it concrete and tied to their specific situation.
-
-DIAGNOSTIC DATA — use only this, nothing else:
+DIAGNOSTIC DATA — use only this:
 Organization: {organization_name}
 Overall score: {pack['overall_score']}/100 — {pack['overall_band']['label']}
-What this means: {pack['overall_band']['description']}
+{pack['overall_band']['description']}
 
 Section scores:
 {chr(10).join(f"  {sec}: {sc}/100" for sec, sc in pack['section_scores'].items())}
 
 Primary value barrier: {primary['name']}
-  What it means: {primary['summary']}
-  Implication: {primary.get('implications', '')}
+  {primary['summary']}
+  {primary.get('implications', '')}
 
-Detected value barriers:
-{chr(10).join(f"  {p['name']}: {p['summary']}" for p in patterns)}
-
-Strongest dimensions: {[f"{d}: {s}/100" for d, s in pack['strongest_dimensions'][:2]]}
-Weakest dimensions:   {[f"{d}: {s}/100" for d, s in pack['weakest_dimensions'][:3]]}
-
-Top priority actions:
-{chr(10).join(f"  - {a}" for a in [a for p in patterns[:2] for a in p.get('actions', [])[:2]])}
+Detected value barriers: {[p['name'] for p in patterns]}
+Weakest dimensions: {[f"{d}: {s}/100" for d, s in pack['weakest_dimensions'][:3]]}
 """.strip()
 
 
@@ -142,7 +126,7 @@ def generate_report(scores, responses, context, organization_name="Your organiza
             ],
         )
         narrative["gpt_narrative"] = message.content[0].text.strip()
-        return narrative, pack, "Claude-enhanced"
+        return narrative, pack, "AI-enhanced"
 
     except Exception as e:
         narrative["gpt_narrative"] = None

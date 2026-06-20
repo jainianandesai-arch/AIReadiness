@@ -144,7 +144,7 @@ ROADMAP_BY_PATTERN = {
     },
     "Shadow AI Risk": {
         "30": [
-            "Conduct a confidential audit or pulse survey: which AI tools are employees using outside approved channels, and why?",
+            "Conduct a confidential review of which AI tools employees are using outside approved channels — and what needs those tools are meeting.",
             "Identify the gap — what need is unapproved AI meeting that approved tools are not?",
             "Publish an amnesty communication: disclose what you are using, no penalty, help us understand the need.",
         ],
@@ -344,7 +344,7 @@ ACTIONS_BY_PATTERN = {
         "Name a single governance owner — not a committee — accountable for practical guidance.",
     ],
     "Shadow AI Risk": [
-        "Conduct a confidential audit: which tools are employees using outside approved channels, and what need are they meeting?",
+        "Conduct a confidential review of unapproved AI tool usage and the needs those tools are meeting.",
         "Fast-track approval for commonly used unapproved tools that meet security and data requirements.",
     ],
     "Change Saturation Risk": [

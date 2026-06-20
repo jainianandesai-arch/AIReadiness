@@ -574,7 +574,7 @@ if "last_pack" in st.session_state:
         )
     with k3:
         st.markdown(
-            f'<div class="kpi-card"><div class="kpi-label">Diagnostic mode</div>'
+            f'<div class="kpi-card"><div class="kpi-label">Analysis</div>'
             f'<div class="kpi-value">{mode}</div>'
             f'<div class="kpi-caption">Constrained to submitted responses and approved pattern rules.</div></div>',
             unsafe_allow_html=True,
