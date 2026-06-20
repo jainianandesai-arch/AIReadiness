@@ -30,7 +30,7 @@ BANDS = [
     (40, 59, "Emerging readiness",
      "Some foundations exist, but the path from AI activity to scaled, measurable value is not yet reliable."),
     (60, 74, "Moderate readiness",
-     "The organisation is positioned to progress, but specific bottlenecks could limit scale and value realisation."),
+     "The organization is positioned to progress, but specific bottlenecks could limit scale and value realization."),
     (75, 89, "Strong readiness",
      "Several conditions needed to move from pilots toward sustained adoption and measurable outcomes are in place."),
     (90, 100, "Scale-ready",

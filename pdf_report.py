@@ -222,10 +222,10 @@ def build_pdf(pack, narrative=None):
     # Section breakdown
     fl.append(_p("SECTION BREAKDOWN", ST["sec"]))
     band_map = [
-        (75,101,"Strength",    "Conditions in place to move from pilots to sustained adoption."),
-        (60, 75,"Moderate",    "Positioned to progress; specific bottlenecks could limit scale."),
-        (40, 60,"Watch area",  "Foundation exists; path from activity to value not yet reliable."),
-        (0,  40,"Priority gap","Material execution risk unless core conditions are strengthened."),
+        (75,101,"Strength",      "Strong signal — conditions support moving from pilots to sustained adoption."),
+        (60, 75,"Moderate",      "Progressing — specific bottlenecks could limit scale and value realization."),
+        (40, 60,"Watch area",    "Foundation exists — path from AI activity to measurable value is not yet reliable."),
+        (0,  40,"Priority gap",  "Material execution risk — core structural conditions need to be strengthened first."),
     ]
     def _band(sc):
         for lo,hi,lbl,desc in band_map:
