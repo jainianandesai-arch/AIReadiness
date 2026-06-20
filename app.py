@@ -587,7 +587,12 @@ if "last_pack" in st.session_state:
         st.markdown('<div class="sec-label" style="margin-top:0">Readiness profile</div>',
                     unsafe_allow_html=True)
         for section, score in pack["section_scores"].items():
-            st.caption(f"{section}: {score}/100")
+            # Band label — light signal only, full description is in the PDF
+            if score >= 75:   band = "Strength"
+            elif score >= 60: band = "Moderate"
+            elif score >= 40: band = "Watch area"
+            else:             band = "Priority gap"
+            st.caption(f"{section}: {score}/100  ·  {band}")
             st.progress(score / 100)
 
         st.markdown('<div class="sec-label">Evidence signals</div>', unsafe_allow_html=True)

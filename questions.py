@@ -215,7 +215,7 @@ QUESTIONS = [
         "question": "How often does AI training translate into visible, measurable changes in how work is actually performed — not just awareness?",
         "options": [
             "Almost never — training happens but work does not change",
-            "Training increases awareness but does not change behaviour or output",
+            "Training increases awareness but does not change behavior or output",
             "Some individuals apply AI in their work after training",
             "Many teams show measurable changes in how work is done after training",
             "Training is tied directly to workflow changes, manager expectations, and adoption metrics",

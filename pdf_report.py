@@ -221,21 +221,40 @@ def build_pdf(pack, narrative=None):
 
     # Section breakdown
     fl.append(_p("SECTION BREAKDOWN", ST["sec"]))
-    band_map = [
-        (75,101,"Strength",      "Strong signal — conditions support moving from pilots to sustained adoption."),
-        (60, 75,"Moderate",      "Progressing — specific bottlenecks could limit scale and value realization."),
-        (40, 60,"Watch area",    "Foundation exists — path from AI activity to measurable value is not yet reliable."),
-        (0,  40,"Priority gap",  "Material execution risk — core structural conditions need to be strengthened first."),
-    ]
-    def _band(sc):
-        for lo,hi,lbl,desc in band_map:
-            if lo <= sc < hi: return lbl, desc
+    # Section-specific band descriptions — each speaks to what that section measures
+    SECTION_BANDS = {
+        "Direction & Value": {
+            (75,101): ("Strength",     "Strategy, leadership, and value discipline are aligned. This is a foundation to build from."),
+            (60, 75): ("Moderate",     "Direction is set but value accountability is uneven. Some initiatives lack clear owners and outcomes."),
+            (40, 60): ("Watch area",   "Strategy and intent exist. The gap is in how AI investment connects to measurable outcomes."),
+            (0,  40): ("Priority gap", "AI investment is happening without clear accountability for where value lands."),
+        },
+        "Adoption & Work": {
+            (75,101): ("Strength",     "AI is changing how work gets done — not just what tools people use. This is genuine adoption."),
+            (60, 75): ("Moderate",     "Adoption is underway but uneven. Tools are being used; work design is lagging behind."),
+            (40, 60): ("Watch area",   "People are engaging with AI. The gap is in whether it is changing how work actually gets done."),
+            (0,  40): ("Priority gap", "The conditions for adoption are not in place. Scaling now will accelerate resistance, not results."),
+        },
+        "Risk & Scale": {
+            (75,101): ("Strength",     "Governance, visibility, and change capacity are enabling responsible scale — not blocking it."),
+            (60, 75): ("Moderate",     "Some guardrails exist but are inconsistently applied. Shadow AI and change load need attention."),
+            (40, 60): ("Watch area",   "Some guardrails are in place. The gap is in whether governance enables scale or quietly blocks it."),
+            (0,  40): ("Priority gap", "Governance and change capacity gaps are creating compounding risk as AI activity increases."),
+        },
+    }
+
+    def _band(sc, section):
+        bands = SECTION_BANDS.get(section, {})
+        for (lo, hi), (lbl, desc) in bands.items():
+            if lo <= sc < hi:
+                return lbl, desc
         return "-", ""
+
 
     rows = [[_p("Area",ST["h2"]), _p("Score",ST["h2"]),
              _p("Signal",ST["h2"]), _p("Band description",ST["h2"])]]
     for sec, sc in pack["section_scores"].items():
-        lbl, desc = _band(sc)
+        lbl, desc = _band(sc, sec)
         rows.append([_p(sec,ST["body"]), _p(f"{sc}/100",ST["body"]),
                      _p(lbl,ST["body"]), _p(desc,ST["body_sm"])])
     fl.append(_flat_tbl(rows, [W*0.24, W*0.10, W*0.16, W*0.50]))
@@ -246,7 +265,7 @@ def build_pdf(pack, narrative=None):
     fl.append(_p(
         "Privacy: This application does not use a database, analytics tracker, or persistent storage layer. "
         "Responses are used only during the active browser session. "
-        "Do not enter confidential, personal, or regulated information.",
+        "Do not enter personal or regulated information.",
         ST["disc"]))
 
     _footer(fl, ST)
