@@ -625,6 +625,8 @@ else:
 st.markdown(
     '<div class="app-footer">'
     'Designed by <span>Jaini Desai</span> &nbsp;·&nbsp; Workforce Intelligence &amp; AI Enablement'
+    ' &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/jainidesai" target="_blank" '
+    'style="color:var(--cobalt);text-decoration:none;font-weight:600;">LinkedIn Profile</a>'
     '</div>',
     unsafe_allow_html=True,
 )

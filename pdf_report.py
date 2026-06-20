@@ -115,7 +115,7 @@ def _styles():
 def _footer(fl, ST):
     fl.append(_hr(LINE, 0.3, 2, 4))
     ft = _no_grid([[
-        _p("Designed by Jaini Desai  -  Workforce Intelligence & AI Enablement", ST["disc"]),
+        _p("Designed by Jaini Desai  -  Workforce Intelligence & AI Enablement  -  linkedin.com/in/jainidesai", ST["disc"]),
         _p(f"AI Transformation Readiness Intelligence  -  {datetime.now().strftime('%d %b %Y')}", ST["footer_r"]),
     ]], [W*0.55, W*0.45])
     fl.append(ft)
