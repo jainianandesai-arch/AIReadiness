@@ -150,7 +150,7 @@ def build_pdf(pack, narrative=None):
          _p("TRANSFORMATION OWNERSHIP", ST["lbl"]), _p("GENERATED", ST["lbl"])],
         [_p(org, ST["body"]), _p(ctx.get("C1","Not specified"), ST["body"]),
          _p(ctx.get("C2","Not specified"), ST["body"]),
-         _p(datetime.now().strftime("%d %b %Y  %H:%M"), ST["body"])],
+         _p(datetime.now().strftime("%d %b %Y"), ST["body"])],
     ], colWidths=[W*0.21, W*0.25, W*0.31, W*0.23], hAlign="LEFT")
     meta.setStyle(TableStyle([
         ("BACKGROUND",    (0,0),(-1,0), PANEL),
